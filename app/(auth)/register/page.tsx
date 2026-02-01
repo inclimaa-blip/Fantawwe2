@@ -58,7 +58,7 @@ export default function RegisterPage() {
   async function onSubmit(data: RegisterForm) {
     setIsLoading(true)
 
-    const { error } = await supabase.auth.signUp({
+    const { data: signUpData, error } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
       options: {
@@ -72,6 +72,33 @@ export default function RegisterPage() {
       toast({
         title: "Registration failed",
         description: error.message,
+        variant: "destructive",
+      })
+      setIsLoading(false)
+      return
+    }
+
+    const userId = signUpData.user?.id
+
+    if (!userId) {
+      toast({
+        title: "Registration failed",
+        description: "User information was not returned. Please try again.",
+        variant: "destructive",
+      })
+      setIsLoading(false)
+      return
+    }
+
+    const { error: profileError } = await supabase.from("profiles").insert({
+      id: userId,
+      username: data.username,
+    })
+
+    if (profileError) {
+      toast({
+        title: "Profile setup failed",
+        description: profileError.message,
         variant: "destructive",
       })
       setIsLoading(false)
