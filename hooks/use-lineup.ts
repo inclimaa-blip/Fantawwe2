@@ -46,7 +46,11 @@ export function useLineup() {
         .single()
 
       if (rosterData) {
-        setRoster(rosterData as unknown as RosterWithWrestlers)
+        const rosterWithWrestlers: RosterWithWrestlers = {
+          ...(rosterData as RosterWithWrestlers),
+          wrestlers: rosterData.roster_wrestlers || [],
+        }
+        setRoster(rosterWithWrestlers)
 
         // Fetch current lineup
         const { data: lineupData } = await supabase
@@ -64,7 +68,11 @@ export function useLineup() {
           .single()
 
         if (lineupData) {
-          setLineup(lineupData as unknown as LineupWithWrestlers)
+          const lineupWithWrestlers: LineupWithWrestlers = {
+            ...(lineupData as LineupWithWrestlers),
+            wrestlers: lineupData.lineup_wrestlers || [],
+          }
+          setLineup(lineupWithWrestlers)
           setSelectedCaptain(lineupData.captain_wrestler_id)
 
           const starters = (lineupData.lineup_wrestlers || [])
