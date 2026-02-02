@@ -36,6 +36,8 @@ export function Navbar({ user, profile }: NavbarProps) {
   }
 
   const isAdmin = profile?.role === "admin"
+  const isManager = profile?.role === "general_manager"
+  const canAccessAdmin = isAdmin || isManager
 
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -48,6 +50,12 @@ export function Navbar({ user, profile }: NavbarProps) {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center gap-6">
+            <Link
+              href="/leagues"
+              className="text-sm font-medium transition-colors hover:text-primary"
+            >
+              Leagues
+            </Link>
             <Link
               href="/roster"
               className="text-sm font-medium transition-colors hover:text-primary"
@@ -72,9 +80,9 @@ export function Navbar({ user, profile }: NavbarProps) {
             >
               Standings
             </Link>
-            {isAdmin && (
+            {canAccessAdmin && (
               <Link
-                href="/admin/wrestlers"
+                href={isAdmin ? "/admin/wrestlers" : "/admin/leagues"}
                 className="text-sm font-medium transition-colors hover:text-primary"
               >
                 Admin
@@ -93,6 +101,9 @@ export function Navbar({ user, profile }: NavbarProps) {
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild className="md:hidden">
+                <Link href="/leagues">Leagues</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="md:hidden">
                 <Link href="/roster">Roster</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="md:hidden">
@@ -104,9 +115,9 @@ export function Navbar({ user, profile }: NavbarProps) {
               <DropdownMenuItem asChild className="md:hidden">
                 <Link href="/standings">Standings</Link>
               </DropdownMenuItem>
-              {isAdmin && (
+              {canAccessAdmin && (
                 <DropdownMenuItem asChild className="md:hidden">
-                  <Link href="/admin/wrestlers">Admin</Link>
+                  <Link href={isAdmin ? "/admin/wrestlers" : "/admin/leagues"}>Admin</Link>
                 </DropdownMenuItem>
               )}
               <DropdownMenuSeparator className="md:hidden" />
