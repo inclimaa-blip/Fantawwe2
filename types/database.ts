@@ -1,7 +1,7 @@
 // Database types for Supabase
 // These types match the database schema defined in supabase/migrations/001_initial_schema.sql
 
-export type UserRole = 'player' | 'admin'
+export type UserRole = 'player' | 'admin' | 'general_manager'
 export type LeagueStatus = 'draft' | 'active' | 'extension' | 'trade_window' | 'completed'
 export type WWEBrand = 'raw' | 'smackdown' | 'nxt'
 export type WrestlerStatus = 'active' | 'injured' | 'released'
